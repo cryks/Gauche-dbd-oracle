@@ -75,6 +75,8 @@ static void stmt_finalize(ScmObj obj, void *data)
 {
     Scm_OCIStmt *stmt = (Scm_OCIStmt *)obj;
 
+    if (!stmt) return;
+
     if (stmt->bind_handles != NULL) {
         sb4 idx;
 
@@ -85,6 +87,7 @@ static void stmt_finalize(ScmObj obj, void *data)
             }
         }
         free(stmt->bind_handles);
+        stmt->bind_handles = NULL;
     }
     if (stmt->column_handles != NULL) {
         sb4 idx;
@@ -96,6 +99,7 @@ static void stmt_finalize(ScmObj obj, void *data)
             }
         }
         free(stmt->column_handles);
+        stmt->column_handles = NULL;
     }
     if (stmt->stmtp != NULL) {
         OCIHandleFree(stmt->stmtp, OCI_HTYPE_STMT);
